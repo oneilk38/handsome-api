@@ -1,7 +1,7 @@
-package com.handsome.api.infratructure.postgres
+package com.handsome.api.infratructure.postgres.employee
 
+import com.handsome.api.domain.CompanyId
 import com.handsome.api.domain.Employee
-import com.handsome.api.domain.EmployeeCreationRequest
 import com.handsome.api.domain.EmployeeId
 import org.jooq.DSLContext
 import org.jooq.Record
@@ -16,25 +16,37 @@ class PostgresEmployeeRepository(
     private val dslContext: DSLContext
 ) : EmployeeRepository {
 
-    override fun find(employeeId: EmployeeId): Employee? {
+    override fun find(employeeId: EmployeeId, companyId: CompanyId): Employee? {
         return dslContext.selectFrom(EMPLOYEES)
-            .where(EMPLOYEES.ID.eq(employeeId.value.toInt()))
+            .where(EMPLOYEES.ID.eq(employeeId.value))
+            .and(EMPLOYEES.COMPANY_ID.eq(companyId.value))
             .fetchOne()?.toEmployee() ?: null
     }
 
-    override fun findAll(): List<Employee> {
-        return dslContext.selectFrom(EMPLOYEES).fetch().map { it.toEmployee() }
+    override fun findAllByCompany(companyId: CompanyId): List<Employee> {
+        return dslContext.selectFrom(EMPLOYEES)
+            .where(EMPLOYEES.COMPANY_ID.eq(companyId.value))
+            .fetch().map { it.toEmployee() }
     }
 
-    override fun create(employee: EmployeeCreationRequest): EmployeeId? {
+    override fun create(employee: Employee): EmployeeId? {
         return dslContext.insertInto(EMPLOYEES)
+            .set(EMPLOYEES.ID, employee.id.value)
+            .set(EMPLOYEES.COMPANY_ID, employee.companyId.value)
             .set(EMPLOYEES.FIRST_NAME, employee.firstName)
             .set(EMPLOYEES.LAST_NAME, employee.lastName)
             .set(EMPLOYEES.EMAIL, employee.email)
             .set(EMPLOYEES.JOB_TITLE, employee.position)
+            .set(EMPLOYEES.CREATED_AT, employee.createdAt)
             .returning(EMPLOYEES.ID)
             .fetchOne()
             .toEmployeeId()
+    }
+
+    override fun deleteByCompany(companyId: CompanyId) {
+        dslContext.deleteFrom(EMPLOYEES)
+            .where(EMPLOYEES.COMPANY_ID.eq(companyId.value))
+            .execute()
     }
 
     private fun EmployeesRecord?.toEmployeeId(): EmployeeId? {
@@ -42,14 +54,17 @@ class PostgresEmployeeRepository(
             return null
         }
 
-        return this.get(EMPLOYEES.ID).let { EmployeeId.fromInt(it) }
+        return EmployeeId(this.get(EMPLOYEES.ID))
     }
 
     private fun Record.toEmployee() = Employee(
-        id = EmployeeId.fromInt(this[EMPLOYEES.ID]),
+        id = EmployeeId(this[EMPLOYEES.ID]),
+        companyId = CompanyId(this[EMPLOYEES.COMPANY_ID]),
         firstName = this[EMPLOYEES.FIRST_NAME],
         lastName = this[EMPLOYEES.LAST_NAME],
         email = this[EMPLOYEES.EMAIL],
-        position = this[EMPLOYEES.JOB_TITLE]
+        position = this[EMPLOYEES.JOB_TITLE],
+        createdAt = this[EMPLOYEES.CREATED_AT],
+        deletedAt = this[EMPLOYEES.DELETED_AT]
     )
 }

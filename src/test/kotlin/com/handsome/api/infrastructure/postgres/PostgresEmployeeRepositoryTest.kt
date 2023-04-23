@@ -1,8 +1,9 @@
 package com.handsome.api.infrastructure.postgres
 
-import com.handsome.api.domain.EmployeeCreationRequest
+import com.handsome.api.domain.CompanyId
+import com.handsome.api.domain.Employee
 import com.handsome.api.domain.EmployeeId
-import com.handsome.api.infratructure.postgres.PostgresEmployeeRepository
+import com.handsome.api.infratructure.postgres.employee.PostgresEmployeeRepository
 import org.jooq.DSLContext
 import org.jooq.generated.tables.Employees
 import org.junit.Assert.assertEquals
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
@@ -33,44 +35,55 @@ class PostgresEmployeeRepositoryTest(
 
     @Test
     fun `find - should return null if no employee exists`() {
-        val employeeId = EmployeeId(1)
-        val maybeEmployee = employeeRepository.find(employeeId)
+        val employeeId = EmployeeId(UUID.randomUUID())
+        val companyId = CompanyId(UUID.randomUUID())
+        val maybeEmployee = employeeRepository.find(employeeId, companyId)
 
         assertNull(maybeEmployee)
     }
 
     @Test
     fun `find - should return employee if employee exists`() {
-        val employeeCreationRequest = EmployeeCreationRequest(
+        val employeeToCreate = Employee(
+            id = EmployeeId(UUID.randomUUID()),
+            companyId = CompanyId(UUID.randomUUID()),
             firstName = "Kevin",
             lastName = "ONeill",
             email = "kevinoneill@gmail.com",
             position = "Engineer"
         )
 
-        val createdEmployeeId = employeeRepository.create(employeeCreationRequest)
+        val createdEmployeeId = employeeRepository.create(employeeToCreate)
 
-        val employeeFromRepo = employeeRepository.find(createdEmployeeId!!)
+        val employeeFromRepo = employeeRepository.find(createdEmployeeId!!, employeeToCreate.companyId)
 
-        assertEquals(employeeCreationRequest.toEmployee(createdEmployeeId), employeeFromRepo)
+        assertEquals(employeeToCreate, employeeFromRepo)
     }
 
     @Test
     fun `findAll - should return all employees`() {
+        val companyId = CompanyId(UUID.randomUUID())
+
         val employeesToCreate = listOf(
-            EmployeeCreationRequest(
+            Employee(
+                id = EmployeeId(UUID.randomUUID()),
+                companyId = companyId,
                 firstName = "Kevin",
                 lastName = "ONeill",
                 email = "kevinoneill@gmail.com",
                 position = "Engineer"
             ),
-            EmployeeCreationRequest(
+            Employee(
+                id = EmployeeId(UUID.randomUUID()),
+                companyId = companyId,
                 firstName = "James",
                 lastName = "Kelly",
                 email = "jkelly@gmail.com",
                 position = "Designer"
             ),
-            EmployeeCreationRequest(
+            Employee(
+                id = EmployeeId(UUID.randomUUID()),
+                companyId = companyId,
                 firstName = "Sally Anne",
                 lastName = "Cash",
                 email = "scash@gmail.com",
@@ -80,14 +93,8 @@ class PostgresEmployeeRepositoryTest(
 
         employeesToCreate.forEach { employeeRepository.create(it) }
 
-        val employeesFromRepo = employeeRepository.findAll()
+        val employeesFromRepo = employeeRepository.findAllByCompany(companyId)
 
-        val expectedEmployees = listOf(
-            employeesToCreate[0].toEmployee(EmployeeId(1)),
-            employeesToCreate[1].toEmployee(EmployeeId(2)),
-            employeesToCreate[2].toEmployee(EmployeeId(3))
-        )
-
-        assertEquals(expectedEmployees, employeesFromRepo)
+        assertEquals(employeesToCreate, employeesFromRepo)
     }
 }
