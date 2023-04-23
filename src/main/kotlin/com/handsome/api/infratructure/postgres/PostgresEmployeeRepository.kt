@@ -26,13 +26,23 @@ class PostgresEmployeeRepository(
         return dslContext.selectFrom(EMPLOYEES).fetch().map { it.toEmployee() }
     }
 
-    override fun create(employee: EmployeeCreationRequest) {
-        dslContext.insertInto(EMPLOYEES)
+    override fun create(employee: EmployeeCreationRequest): EmployeeId? {
+        return dslContext.insertInto(EMPLOYEES)
             .set(EMPLOYEES.FIRST_NAME, employee.firstName)
             .set(EMPLOYEES.LAST_NAME, employee.lastName)
             .set(EMPLOYEES.EMAIL, employee.email)
             .set(EMPLOYEES.JOB_TITLE, employee.position)
-            .execute()
+            .returning(EMPLOYEES.ID)
+            .fetchOne()
+            .toEmployeeId()
+    }
+
+    private fun EmployeesRecord?.toEmployeeId(): EmployeeId? {
+        if (this == null) {
+            return null
+        }
+
+        return this.get(EMPLOYEES.ID).let { EmployeeId.fromInt(it) }
     }
 
     private fun Record.toEmployee() = Employee(
@@ -40,6 +50,6 @@ class PostgresEmployeeRepository(
         firstName = this[EMPLOYEES.FIRST_NAME],
         lastName = this[EMPLOYEES.LAST_NAME],
         email = this[EMPLOYEES.EMAIL],
-        position = this[EMPLOYEES.JOB_TITLE],
+        position = this[EMPLOYEES.JOB_TITLE]
     )
 }

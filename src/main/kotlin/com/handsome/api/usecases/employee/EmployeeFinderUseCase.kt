@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component
 class EmployeeFinderUseCase(
     private val employeeRepository: EmployeeRepository
 ) {
-    fun find(employeeId: EmployeeId) = employeeRepository.find(employeeId)
+    fun find(employeeId: EmployeeId) = employeeRepository.find(
+        employeeId
+    )
     fun findAll() = employeeRepository.findAll()
 }

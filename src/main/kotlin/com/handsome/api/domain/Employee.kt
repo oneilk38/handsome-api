@@ -1,6 +1,6 @@
 package com.handsome.api.domain
 
-data class EmployeeId(val value: Long){
+data class EmployeeId(val value: Long) {
     companion object {
         fun fromInt(value: Int) = EmployeeId(value.toLong())
     }
@@ -19,4 +19,12 @@ data class EmployeeCreationRequest(
     val lastName: String,
     val email: String,
     val position: String
-)
+) {
+    fun toEmployee(id: EmployeeId) = Employee(
+        id = id,
+        firstName = firstName,
+        lastName = lastName,
+        email = email,
+        position = position
+    )
+}

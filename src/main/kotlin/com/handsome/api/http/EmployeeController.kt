@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.RestController
 class EmployeeController(
     private val employeeFinderUseCase: EmployeeFinderUseCase,
     private val employeeCreatorUseCase: EmployeeCreatorUseCase
-){
+) {
 
     @GetMapping("/employees/{employeeId}")
-    private fun getEmployee(@PathVariable employeeId: Long) : Employee? {
+    private fun getEmployee(@PathVariable employeeId: Long): Employee? {
         return employeeFinderUseCase.find(EmployeeId(employeeId))
     }
 
     @GetMapping("/employees")
-    private fun getEmployees() : List<Employee> {
+    private fun getEmployees(): List<Employee> {
         return employeeFinderUseCase.findAll()
     }
 
     @PostMapping("/employees")
-    private fun createEmployee(@RequestBody employeeCreatorRequest: EmployeeCreationRequest) {
+    private fun createEmployee(@RequestBody employeeCreatorRequest: EmployeeCreationRequest): EmployeeId? {
         return employeeCreatorUseCase.create(employeeCreatorRequest)
     }
 }
