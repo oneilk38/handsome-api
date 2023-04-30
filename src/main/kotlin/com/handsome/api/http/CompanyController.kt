@@ -1,9 +1,9 @@
 package com.handsome.api.http
 
-import com.handsome.api.domain.Company
-import com.handsome.api.domain.CompanyId
+import com.handsome.api.domain.company.CompanyId
+import com.handsome.api.domain.company.CreateCompanyRequest
 import com.handsome.api.usecases.company.CompanyCreatorUseCase
-import com.handsome.api.usecases.company.CompanyDeletorUseCase
+import com.handsome.api.usecases.company.CompanyDeleterUseCase
 import com.handsome.api.usecases.company.CompanyFinderUseCase
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +17,7 @@ import java.util.*
 @Suppress("unused")
 class CompanyController(
     private val companyCreatorUseCase: CompanyCreatorUseCase,
-    private val companyDeletorUseCase: CompanyDeletorUseCase,
+    private val companyDeleterUseCase: CompanyDeleterUseCase,
     private val companyFinderUseCase: CompanyFinderUseCase
 ) {
     @GetMapping("/company/{id}")
@@ -25,10 +25,10 @@ class CompanyController(
         companyFinderUseCase.findCompany(CompanyId(id))
 
     @PostMapping("/company")
-    fun createCompany(@RequestBody company: Company): CompanyId? =
-        companyCreatorUseCase.createCompany(company)
+    fun createCompany(@RequestBody request: CreateCompanyRequest): CompanyId? =
+        companyCreatorUseCase.createCompany(request.toCompany())
 
     @DeleteMapping("/company/{id}")
     fun deleteCompany(@PathVariable id: UUID) =
-        companyDeletorUseCase.deleteCompany(CompanyId(id))
+        companyDeleterUseCase.deleteCompany(CompanyId(id))
 }

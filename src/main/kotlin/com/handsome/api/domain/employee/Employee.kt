@@ -1,10 +1,10 @@
-package com.handsome.api.domain
+package com.handsome.api.domain.employee
 
+import com.handsome.api.domain.company.CompanyId
 import java.time.LocalDateTime
 import java.util.UUID
 
 data class EmployeeId(val value: UUID) {
-    constructor(uuidStr: String) : this(UUID.fromString(uuidStr))
     override fun toString(): String = value.toString()
 }
 
@@ -17,5 +17,4 @@ data class Employee(
     val position: String,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val deletedAt: LocalDateTime? = null
-
 )

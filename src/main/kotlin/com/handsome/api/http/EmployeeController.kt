@@ -1,8 +1,9 @@
 package com.handsome.api.http
 
-import com.handsome.api.domain.CompanyId
-import com.handsome.api.domain.Employee
-import com.handsome.api.domain.EmployeeId
+import com.handsome.api.domain.company.CompanyId
+import com.handsome.api.domain.employee.CreateEmployeeRequest
+import com.handsome.api.domain.employee.Employee
+import com.handsome.api.domain.employee.EmployeeId
 import com.handsome.api.usecases.employee.EmployeeCreatorUseCase
 import com.handsome.api.usecases.employee.EmployeeFinderUseCase
 import org.springframework.web.bind.annotation.GetMapping
@@ -33,7 +34,7 @@ class EmployeeController(
     }
 
     @PostMapping("/employees")
-    private fun createEmployee(@RequestBody employee: Employee): EmployeeId? {
-        return employeeCreatorUseCase.create(employee)
+    private fun createEmployee(@RequestBody request: CreateEmployeeRequest): EmployeeId? {
+        return employeeCreatorUseCase.create(request.toCreateEmployeeRequest())
     }
 }

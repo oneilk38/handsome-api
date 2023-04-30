@@ -1,16 +1,15 @@
 package com.handsome.api.infratructure.postgres.employee
 
-import com.handsome.api.domain.CompanyId
-import com.handsome.api.domain.Employee
-import com.handsome.api.domain.EmployeeId
+import com.handsome.api.domain.company.CompanyId
+import com.handsome.api.domain.employee.Employee
+import com.handsome.api.domain.employee.EmployeeId
+import com.handsome.api.domain.employee.EmployeeRepository
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.generated.tables.Employees.EMPLOYEES
 import org.jooq.generated.tables.records.EmployeesRecord
-import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 
-@Primary
 @Component
 class PostgresEmployeeRepository(
     private val dslContext: DSLContext

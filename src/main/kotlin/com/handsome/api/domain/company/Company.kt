@@ -1,10 +1,9 @@
-package com.handsome.api.domain
+package com.handsome.api.domain.company
 
 import java.time.LocalDateTime
 import java.util.UUID
 
 data class CompanyId(val value: UUID) {
-    constructor(uuidStr: String) : this(UUID.fromString(uuidStr))
     override fun toString(): String = value.toString()
 }
 
