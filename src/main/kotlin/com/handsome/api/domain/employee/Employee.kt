@@ -5,7 +5,19 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 data class EmployeeId(val value: UUID) {
+    constructor(uuidStr: String) : this(UUID.fromString(uuidStr))
+
     override fun toString(): String = value.toString()
+
+    companion object {
+        fun fromNullableUUID(maybeUUID: UUID?): EmployeeId? {
+            return if (maybeUUID == null) {
+                null
+            } else {
+                EmployeeId(maybeUUID)
+            }
+        }
+    }
 }
 
 data class Employee(

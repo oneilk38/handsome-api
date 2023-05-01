@@ -7,6 +7,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 data class ProjectId(val value: UUID) {
+    constructor(uuidStr: String) : this(UUID.fromString(uuidStr))
+
     override fun toString(): String = value.toString()
 }
 

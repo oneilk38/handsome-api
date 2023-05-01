@@ -31,7 +31,10 @@ class PostgresProjectRepository(
     }
 
     override fun findProjects(companyId: CompanyId, projectIds: List<ProjectId>): List<Project> {
-        var query = dslContext.selectFrom(PROJECTS).where(PROJECTS.COMPANY_ID.eq(companyId.value))
+        var query =
+            dslContext.selectFrom(PROJECTS)
+                .where(PROJECTS.COMPANY_ID.eq(companyId.value))
+                .and(PROJECTS.DELETED_AT.isNull)
 
         if (projectIds.isNotEmpty()) {
             query = query.and(PROJECTS.ID.`in`(projectIds.map { it.value }))
@@ -50,8 +53,9 @@ class PostgresProjectRepository(
     override fun findEmployeeProjects(companyId: CompanyId, employeeId: EmployeeId): List<Project> {
         return dslContext.select()
             .from(PROJECTS).join(PROJECT_ASSIGNMENTS)
-            .on(PROJECTS.ID.eq(PROJECT_ASSIGNMENTS.ID))
+            .on(PROJECTS.ID.eq(PROJECT_ASSIGNMENTS.PROJECT_ID))
             .where(PROJECT_ASSIGNMENTS.EMPLOYEE_ID.eq(employeeId.value))
+            .and(PROJECT_ASSIGNMENTS.DELETED_AT.isNull)
             .fetch()
             .into(PROJECTS)
             .map { it.toProject() }

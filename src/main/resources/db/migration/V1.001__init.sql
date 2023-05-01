@@ -50,7 +50,7 @@ CREATE TABLE tickets(
     description varchar(255),
     status varchar(255) not null,
     reporter uuid not null,
-    assignee uuid,
+    assignee uuid null,
     created_at timestamp not null,
     updated_at timestamp,
     deleted_at timestamp,

@@ -117,11 +117,11 @@ class PostgresTicketRepository(
         id = TicketId(this[TICKETS.ID]),
         companyId = CompanyId(this[TICKETS.COMPANY_ID]),
         projectId = ProjectId(this[TICKETS.PROJECT_ID]),
-        assignee = EmployeeId(this[TICKETS.ASSIGNEE]),
+        assignee = EmployeeId.fromNullableUUID(this[TICKETS.ASSIGNEE]),
         reporter = EmployeeId(this[TICKETS.REPORTER]),
         title = this[TICKETS.TITLE],
         description = this[TICKETS.DESCRIPTION],
-        status = TicketStatus.fromDbValue(this[TICKETS.STATUS]),
+        status = TicketStatus.fromString(this[TICKETS.STATUS]),
         createdAt = this[TICKETS.CREATED_AT],
         updatedAt = this[TICKETS.UPDATED_AT],
         deletedAt = this[TICKETS.DELETED_AT]

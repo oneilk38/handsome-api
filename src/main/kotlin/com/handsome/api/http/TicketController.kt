@@ -11,6 +11,7 @@ import com.handsome.api.domain.ticket.SetStatusRequest
 import com.handsome.api.domain.ticket.SetTitleRequest
 import com.handsome.api.domain.ticket.Ticket
 import com.handsome.api.domain.ticket.TicketId
+import com.handsome.api.domain.ticket.TicketStatus
 import com.handsome.api.usecases.ticket.TicketAssigneeUpdater
 import com.handsome.api.usecases.ticket.TicketCreatorUseCase
 import com.handsome.api.usecases.ticket.TicketDeleterUseCase
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
-@RestController("/tickets")
+@RestController
 class TicketController(
     private val ticketFinderUseCase: TicketFinderUseCase,
     private val ticketCreatorUseCase: TicketCreatorUseCase,
@@ -37,25 +38,25 @@ class TicketController(
     private val ticketDetailsUpdater: TicketDetailsUpdater,
     private val ticketStatusUpdater: TicketStatusUpdater
 ) {
-    @PostMapping
-    fun create(createTicketRequest: CreateTicketRequest) {
+    @PostMapping("/tickets")
+    fun create(@RequestBody createTicketRequest: CreateTicketRequest) {
         ticketCreatorUseCase.createTicket(createTicketRequest.toTicket())
     }
 
-    @GetMapping("/company/{companyId}")
+    @GetMapping("/tickets/company/{companyId}")
     fun getTickets(@PathVariable companyId: UUID): List<Ticket> {
         return ticketFinderUseCase.findTickets(CompanyId(companyId))
     }
 
-    @GetMapping("/company/{companyId}/employee/{employeeId}")
-    fun getTickets(@PathVariable companyId: UUID, @PathVariable employeeId: UUID): List<Ticket> {
+    @GetMapping("/tickets/company/{companyId}/employee/{employeeId}")
+    fun getEmployeeTickets(@PathVariable companyId: UUID, @PathVariable employeeId: UUID): List<Ticket> {
         return ticketFinderUseCase.findTicketsForEmployee(
             companyId = CompanyId(companyId),
             employeeId = EmployeeId(employeeId)
         )
     }
 
-    @GetMapping("/company/{companyId}/ticket/{ticketId}")
+    @GetMapping("/tickets/company/{companyId}/ticket/{ticketId}")
     fun getTicket(@PathVariable companyId: UUID, @PathVariable ticketId: UUID): Ticket? {
         return ticketFinderUseCase.findTicket(
             companyId = CompanyId(companyId),
@@ -63,7 +64,7 @@ class TicketController(
         )
     }
 
-    @GetMapping("/company/{companyId}/project/{projectId}")
+    @GetMapping("/tickets/company/{companyId}/project/{projectId}")
     fun getTicketsForProject(@PathVariable companyId: UUID, @PathVariable projectId: UUID): List<Ticket> {
         return ticketFinderUseCase.findTicketsForProject(
             companyId = CompanyId(companyId),
@@ -71,7 +72,7 @@ class TicketController(
         )
     }
 
-    @PutMapping("/assign")
+    @PutMapping("/tickets/assign")
     fun assignToTicket(@RequestBody request: SetAssigneeRequest) {
         ticketAssigneeUpdater.assignToTicket(
             companyId = request.companyId,
@@ -80,7 +81,7 @@ class TicketController(
         )
     }
 
-    @PutMapping("/unassign")
+    @PutMapping("/tickets/unassign")
     fun removeFromTicket(@RequestBody request: SetAssigneeRequest) {
         ticketAssigneeUpdater.removeFromTicket(
             companyId = request.companyId,
@@ -89,7 +90,7 @@ class TicketController(
         )
     }
 
-    @PutMapping("/reporter")
+    @PutMapping("/tickets/reporter")
     fun setReporter(@RequestBody request: SetReporterRequest) {
         ticketReporterUpdater.setReporter(
             companyId = request.companyId,
@@ -98,16 +99,16 @@ class TicketController(
         )
     }
 
-    @PutMapping("/status")
+    @PutMapping("/tickets/status")
     fun setStatus(@RequestBody request: SetStatusRequest) {
         ticketStatusUpdater.setStatus(
             companyId = request.companyId,
             ticketId = request.ticketId,
-            status = request.status
+            status = TicketStatus.fromString(request.status)
         )
     }
 
-    @PutMapping("/title")
+    @PutMapping("/tickets/title")
     fun setTitle(@RequestBody request: SetTitleRequest) {
         ticketDetailsUpdater.updateTitle(
             companyId = request.companyId,
@@ -116,7 +117,7 @@ class TicketController(
         )
     }
 
-    @PutMapping("/description")
+    @PutMapping("/tickets/description")
     fun setDescription(@RequestBody request: SetDescriptionRequest) {
         ticketDetailsUpdater.updateDescription(
             companyId = request.companyId,
@@ -125,7 +126,7 @@ class TicketController(
         )
     }
 
-    @DeleteMapping("/company/{companyId}/ticket/{ticketId}")
+    @DeleteMapping("/tickets/company/{companyId}/ticket/{ticketId}")
     fun deleteTicket(@PathVariable companyId: UUID, @PathVariable ticketId: UUID) {
         ticketDeleterUseCase.deleteTicket(
             companyId = CompanyId(companyId),

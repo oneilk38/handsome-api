@@ -7,7 +7,11 @@ import org.jooq.generated.tables.records.TicketsRecord
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class TicketId(val value: UUID)
+data class TicketId(val value: UUID) {
+    constructor(uuidStr: String) : this(UUID.fromString(uuidStr))
+
+    override fun toString(): String = value.toString()
+}
 
 enum class TicketStatus(val value: String) {
     READY("ready"),
@@ -20,7 +24,7 @@ enum class TicketStatus(val value: String) {
     DELETED("deleted");
 
     companion object {
-        fun fromDbValue(value: String) = when (value) {
+        fun fromString(value: String) = when (value) {
             "ready" -> READY
             "todo" -> TODO
             "in_progress" -> IN_PROGRESS
@@ -50,6 +54,7 @@ data class Ticket(
         val record = TicketsRecord()
 
         record.id = id.value
+        record.projectId = projectId.value
         record.companyId = companyId.value
         record.title = title
         record.description = description

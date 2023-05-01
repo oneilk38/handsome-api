@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
@@ -27,7 +28,7 @@ class ProjectController(
     private val projectFinderUseCase: ProjectFinderUseCase
 ) {
     @PostMapping("/projects")
-    fun createProject(request: CreateProjectRequest) {
+    fun createProject(@RequestBody request: CreateProjectRequest) {
         projectCreatorUseCase.createProject(request.toProject())
     }
 
@@ -55,12 +56,12 @@ class ProjectController(
     }
 
     @PutMapping("/projects/assign")
-    fun assign(request: CreateProjectAssignmentRequest) {
+    fun assign(@RequestBody request: CreateProjectAssignmentRequest) {
         projectAssignorUseCase.assign(request.toProjectAssignment())
     }
 
     @PutMapping("/projects/remove")
-    fun remove(request: RemoveProjectAssignmentRequest) {
+    fun remove(@RequestBody request: RemoveProjectAssignmentRequest) {
         projectAssignorUseCase.remove(
             companyId = request.companyId,
             projectId = request.projectId,

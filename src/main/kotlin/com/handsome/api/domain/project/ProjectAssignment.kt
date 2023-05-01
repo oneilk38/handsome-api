@@ -6,7 +6,11 @@ import org.jooq.generated.tables.records.ProjectAssignmentsRecord
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class ProjectAssignmentId(val value: UUID)
+data class ProjectAssignmentId(val value: UUID) {
+    constructor(uuidStr: String) : this(UUID.fromString(uuidStr))
+
+    override fun toString(): String = value.toString()
+}
 
 data class ProjectAssignment(
     val id: ProjectAssignmentId,

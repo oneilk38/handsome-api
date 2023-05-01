@@ -10,7 +10,7 @@ data class CreateTicketRequest(
     val companyId: CompanyId,
     val title: String,
     val description: String?,
-    val status: TicketStatus,
+    val status: String,
     val reporter: EmployeeId,
     val assignee: EmployeeId?
 ) {
@@ -20,7 +20,7 @@ data class CreateTicketRequest(
         companyId = companyId,
         title = title,
         description = description,
-        status = status,
+        status = TicketStatus.fromString(status),
         reporter = reporter,
         assignee = assignee
     )
@@ -53,5 +53,5 @@ data class SetDescriptionRequest(
 data class SetStatusRequest(
     val companyId: CompanyId,
     val ticketId: TicketId,
-    val status: TicketStatus
+    val status: String
 )
