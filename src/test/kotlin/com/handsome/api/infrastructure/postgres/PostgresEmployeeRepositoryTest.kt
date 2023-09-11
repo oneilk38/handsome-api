@@ -1,8 +1,8 @@
 package com.handsome.api.infrastructure.postgres
 
-import com.handsome.api.domain.CompanyId
-import com.handsome.api.domain.Employee
-import com.handsome.api.domain.EmployeeId
+import com.handsome.api.domain.company.CompanyId
+import com.handsome.api.domain.employee.Employee
+import com.handsome.api.domain.employee.EmployeeId
 import com.handsome.api.infratructure.postgres.employee.PostgresEmployeeRepository
 import org.jooq.DSLContext
 import org.jooq.generated.tables.Employees

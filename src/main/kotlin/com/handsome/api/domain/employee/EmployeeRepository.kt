@@ -1,8 +1,6 @@
-package com.handsome.api.infratructure.postgres.employee
+package com.handsome.api.domain.employee
 
-import com.handsome.api.domain.CompanyId
-import com.handsome.api.domain.Employee
-import com.handsome.api.domain.EmployeeId
+import com.handsome.api.domain.company.CompanyId
 
 interface EmployeeRepository {
     fun create(employee: Employee): EmployeeId?

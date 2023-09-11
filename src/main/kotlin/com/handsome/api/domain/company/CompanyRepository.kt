@@ -1,7 +1,4 @@
-package com.handsome.api.infratructure.postgres.company
-
-import com.handsome.api.domain.Company
-import com.handsome.api.domain.CompanyId
+package com.handsome.api.domain.company
 
 interface CompanyRepository {
 

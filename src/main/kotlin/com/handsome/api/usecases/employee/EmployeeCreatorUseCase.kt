@@ -1,8 +1,8 @@
 package com.handsome.api.usecases.employee
 
-import com.handsome.api.domain.Employee
-import com.handsome.api.domain.EmployeeId
-import com.handsome.api.infratructure.postgres.employee.EmployeeRepository
+import com.handsome.api.domain.employee.Employee
+import com.handsome.api.domain.employee.EmployeeId
+import com.handsome.api.domain.employee.EmployeeRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

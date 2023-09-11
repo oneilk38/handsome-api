@@ -1,8 +1,9 @@
 package com.handsome.api.infratructure.postgres.company
 
-import com.handsome.api.domain.Company
-import com.handsome.api.domain.CompanyId
-import com.handsome.api.domain.CountryCode
+import com.handsome.api.domain.company.Company
+import com.handsome.api.domain.company.CompanyId
+import com.handsome.api.domain.company.CompanyRepository
+import com.handsome.api.domain.company.CountryCode
 import org.jooq.DSLContext
 import org.jooq.generated.tables.Companies.COMPANIES
 import org.jooq.generated.tables.records.CompaniesRecord

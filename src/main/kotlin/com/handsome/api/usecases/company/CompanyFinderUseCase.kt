@@ -1,7 +1,7 @@
 package com.handsome.api.usecases.company
 
-import com.handsome.api.domain.CompanyId
-import com.handsome.api.infratructure.postgres.company.CompanyRepository
+import com.handsome.api.domain.company.CompanyId
+import com.handsome.api.domain.company.CompanyRepository
 import org.springframework.stereotype.Component
 
 @Component
