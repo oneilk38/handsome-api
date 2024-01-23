@@ -9,4 +9,5 @@ class CompanyFinderUseCase(
     private val companyRepository: CompanyRepository
 ) {
     fun findCompany(companyId: CompanyId) = companyRepository.findCompany(companyId)
+    fun findCompanies() = companyRepository.findCompanies()
 }

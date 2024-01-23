@@ -2,7 +2,7 @@ package com.handsome.api.domain.project
 
 import com.handsome.api.domain.company.CompanyId
 import com.handsome.api.domain.employee.EmployeeId
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 interface ProjectRepository {
     fun createProject(project: Project)
@@ -12,6 +12,6 @@ interface ProjectRepository {
     fun findEmployeeProjects(companyId: CompanyId, employeeId: EmployeeId): List<Project>
     fun isAssignedToProject(companyId: CompanyId, projectId: ProjectId, employeeId: EmployeeId): Boolean
     fun assignToProject(projectAssignment: ProjectAssignment)
-    fun removeFromProject(companyId: CompanyId, projectId: ProjectId, employeeId: EmployeeId, deletedAt: LocalDateTime)
-    fun deleteProject(companyId: CompanyId, projectId: ProjectId, deletedAt: LocalDateTime)
+    fun removeFromProject(companyId: CompanyId, projectId: ProjectId, employeeId: EmployeeId, deletedAt: OffsetDateTime)
+    fun OffsetDateTime(companyId: CompanyId, projectId: ProjectId, deletedAt: OffsetDateTime)
 }

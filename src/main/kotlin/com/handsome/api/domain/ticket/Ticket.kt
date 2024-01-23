@@ -4,7 +4,7 @@ import com.handsome.api.domain.company.CompanyId
 import com.handsome.api.domain.employee.EmployeeId
 import com.handsome.api.domain.project.ProjectId
 import org.jooq.generated.tables.records.TicketsRecord
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.UUID
 
 data class TicketId(val value: UUID) {
@@ -46,9 +46,9 @@ data class Ticket(
     val status: TicketStatus,
     val reporter: EmployeeId,
     val assignee: EmployeeId?,
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    val updatedAt: LocalDateTime? = null,
-    val deletedAt: LocalDateTime? = null
+    val createdAt: OffsetDateTime = OffsetDateTime.now(),
+    val updatedAt: OffsetDateTime? = null,
+    val deletedAt: OffsetDateTime? = null
 ) {
     fun toTicketRecord(): TicketsRecord {
         val record = TicketsRecord()

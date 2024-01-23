@@ -13,7 +13,7 @@ import org.jooq.generated.tables.Projects.PROJECTS
 import org.jooq.generated.tables.records.ProjectAssignmentsRecord
 import org.jooq.generated.tables.records.ProjectsRecord
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @Component
 class PostgresProjectRepository(
@@ -81,7 +81,7 @@ class PostgresProjectRepository(
         }
     }
 
-    override fun removeFromProject(companyId: CompanyId, projectId: ProjectId, employeeId: EmployeeId, deletedAt: LocalDateTime) {
+    override fun removeFromProject(companyId: CompanyId, projectId: ProjectId, employeeId: EmployeeId, deletedAt: OffsetDateTime) {
         dslContext.update(PROJECT_ASSIGNMENTS)
             .set(PROJECT_ASSIGNMENTS.DELETED_AT, deletedAt)
             .where(PROJECT_ASSIGNMENTS.COMPANY_ID.eq(companyId.value))
@@ -89,7 +89,7 @@ class PostgresProjectRepository(
             .execute()
     }
 
-    override fun deleteProject(companyId: CompanyId, projectId: ProjectId, deletedAt: LocalDateTime) {
+    override fun OffsetDateTime(companyId: CompanyId, projectId: ProjectId, deletedAt: OffsetDateTime) {
         // delete project from projects table
         dslContext.update(PROJECTS)
             .set(PROJECTS.DELETED_AT, deletedAt)

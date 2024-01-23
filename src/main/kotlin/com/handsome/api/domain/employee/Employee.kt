@@ -1,7 +1,7 @@
 package com.handsome.api.domain.employee
 
 import com.handsome.api.domain.company.CompanyId
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.UUID
 
 data class EmployeeId(val value: UUID) {
@@ -27,6 +27,6 @@ data class Employee(
     val lastName: String,
     val email: String,
     val position: String,
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    val deletedAt: LocalDateTime? = null
+    val createdAt: OffsetDateTime = OffsetDateTime.now(),
+    val deletedAt: OffsetDateTime? = null
 )

@@ -4,15 +4,17 @@ import com.handsome.api.domain.company.CompanyId
 import com.handsome.api.domain.project.ProjectId
 import com.handsome.api.domain.project.ProjectRepository
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
+import org.springframework.transaction.annotation.Transactional
+import java.time.OffsetDateTime
 
 @Component
+@Transactional
 class ProjectDeleterUseCase(
     private val projectRepository: ProjectRepository
 ) {
-    fun deleteProject(companyId: CompanyId, projectId: ProjectId) = projectRepository.deleteProject(
+    fun deleteProject(companyId: CompanyId, projectId: ProjectId) = projectRepository.OffsetDateTime(
         companyId = companyId,
         projectId = projectId,
-        deletedAt = LocalDateTime.now()
+        deletedAt = OffsetDateTime.now()
     )
 }

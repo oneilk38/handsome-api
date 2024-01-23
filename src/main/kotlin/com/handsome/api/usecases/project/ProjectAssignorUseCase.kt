@@ -1,14 +1,16 @@
 package com.handsome.api.usecases.project
 
+import com.handsome.api.common.currentDateTime
 import com.handsome.api.domain.company.CompanyId
 import com.handsome.api.domain.employee.EmployeeId
 import com.handsome.api.domain.project.ProjectAssignment
 import com.handsome.api.domain.project.ProjectId
 import com.handsome.api.domain.project.ProjectRepository
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
+import org.springframework.transaction.annotation.Transactional
 
 @Component
+@Transactional
 class ProjectAssignorUseCase(
     private val projectRepository: ProjectRepository
 ) {
@@ -21,6 +23,6 @@ class ProjectAssignorUseCase(
         companyId = companyId,
         projectId = projectId,
         employeeId = employeeId,
-        deletedAt = LocalDateTime.now()
+        deletedAt = currentDateTime()
     )
 }

@@ -2,8 +2,9 @@ CREATE TABLE companies (
     id uuid primary key,
     company_name varchar(255) not null,
     country_code varchar(2) not null,
-    created_at timestamp not null,
-    deleted_at timestamp
+    created_at timestamp with time zone not null,
+    updated_at timestamp with time zone,
+    deleted_at timestamp with time zone
 );
 
 CREATE TABLE employees (
@@ -13,8 +14,9 @@ CREATE TABLE employees (
    company_id uuid not null,
    email varchar(255) not null,
    job_title varchar(255) not null,
-   created_at timestamp not null,
-   deleted_at timestamp,
+   created_at timestamp with time zone not null,
+   updated_at timestamp with time zone,
+   deleted_at timestamp with time zone,
    FOREIGN KEY (company_id) REFERENCES companies (id)
 );
 
@@ -25,8 +27,9 @@ CREATE TABLE projects (
     company_id uuid not null,
     project_owner uuid,
     created_by uuid,
-    created_at timestamp not null,
-    deleted_at timestamp,
+    created_at timestamp with time zone not null,
+    updated_at timestamp with time zone,
+    deleted_at timestamp with time zone,
     FOREIGN KEY (company_id) REFERENCES companies (id)
 );
 
@@ -35,8 +38,9 @@ CREATE TABLE project_assignments(
     project_id uuid not null,
     company_id uuid not null,
     employee_id uuid,
-    created_at timestamp not null,
-    deleted_at timestamp,
+    created_at timestamp with time zone not null,
+    updated_at timestamp with time zone,
+    deleted_at timestamp with time zone,
     FOREIGN KEY (company_id) REFERENCES companies (id),
     FOREIGN KEY (project_id) REFERENCES projects (id),
     FOREIGN KEY (employee_id) REFERENCES employees (id)
@@ -51,9 +55,9 @@ CREATE TABLE tickets(
     status varchar(255) not null,
     reporter uuid not null,
     assignee uuid null,
-    created_at timestamp not null,
-    updated_at timestamp,
-    deleted_at timestamp,
+    created_at timestamp with time zone not null,
+    updated_at timestamp with time zone,
+    deleted_at timestamp with time zone,
     FOREIGN KEY (company_id) REFERENCES companies (id),
     FOREIGN KEY (project_id) REFERENCES projects (id),
     FOREIGN KEY (reporter) REFERENCES employees (id)
