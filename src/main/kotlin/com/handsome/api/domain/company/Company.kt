@@ -1,6 +1,6 @@
 package com.handsome.api.domain.company
 
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.UUID
 
 data class CompanyId(val value: UUID) {
@@ -21,6 +21,6 @@ data class Company(
     val id: CompanyId,
     val companyName: String,
     val countryCode: CountryCode,
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    val deletedAt: LocalDateTime? = null
+    val createdAt: OffsetDateTime = OffsetDateTime.now(),
+    val deletedAt: OffsetDateTime? = null
 )

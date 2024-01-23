@@ -74,7 +74,7 @@ class TicketController(
 
     @PutMapping("/tickets/assign")
     fun assignToTicket(@RequestBody request: SetAssigneeRequest) {
-        ticketAssigneeUpdater.assignToTicket(
+        ticketAssigneeUpdater.setAssignee(
             companyId = request.companyId,
             ticketId = request.ticketId,
             assigneeId = request.assigneeId
@@ -83,10 +83,9 @@ class TicketController(
 
     @PutMapping("/tickets/unassign")
     fun removeFromTicket(@RequestBody request: SetAssigneeRequest) {
-        ticketAssigneeUpdater.removeFromTicket(
+        ticketAssigneeUpdater.setAssignee(
             companyId = request.companyId,
-            ticketId = request.ticketId,
-            assigneeId = request.assigneeId
+            ticketId = request.ticketId
         )
     }
 

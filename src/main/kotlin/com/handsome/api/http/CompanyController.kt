@@ -20,15 +20,19 @@ class CompanyController(
     private val companyDeleterUseCase: CompanyDeleterUseCase,
     private val companyFinderUseCase: CompanyFinderUseCase
 ) {
-    @GetMapping("/company/{id}")
+    @GetMapping("/admin/company/{id}")
     private fun getCompany(@PathVariable id: UUID) =
         companyFinderUseCase.findCompany(CompanyId(id))
 
-    @PostMapping("/company")
+    @GetMapping("/admin/companies")
+    private fun getCompanies() =
+        companyFinderUseCase.findCompanies()
+
+    @PostMapping("/admin/company")
     fun createCompany(@RequestBody request: CreateCompanyRequest): CompanyId? =
         companyCreatorUseCase.createCompany(request.toCompany())
 
-    @DeleteMapping("/company/{id}")
+    @DeleteMapping("/admin/company/{id}")
     fun deleteCompany(@PathVariable id: UUID) =
         companyDeleterUseCase.deleteCompany(CompanyId(id))
 }

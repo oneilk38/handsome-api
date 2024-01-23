@@ -11,7 +11,7 @@ import org.jooq.DSLContext
 import org.jooq.generated.tables.Tickets.TICKETS
 import org.jooq.generated.tables.records.TicketsRecord
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @Component
 class PostgresTicketRepository(
@@ -20,6 +20,16 @@ class PostgresTicketRepository(
 
     override fun create(ticket: Ticket) {
         dslContext.insertInto(TICKETS).set(ticket.toTicketRecord()).execute()
+    }
+
+    override fun upsert(ticket: Ticket): Ticket {
+        dslContext.insertInto(TICKETS)
+            .set(ticket.toTicketRecord())
+            .onDuplicateKeyUpdate()
+            .set(ticket.toTicketRecord())
+            .execute()
+
+        return ticket
     }
 
     override fun find(companyId: CompanyId, ticketId: TicketId): Ticket? {
@@ -55,59 +65,9 @@ class PostgresTicketRepository(
             .fetch().map { it.toTicket() }
     }
 
-    override fun delete(companyId: CompanyId, ticketId: TicketId, deletedAt: LocalDateTime) {
+    override fun delete(companyId: CompanyId, ticketId: TicketId, deletedAt: OffsetDateTime) {
         dslContext.update(TICKETS)
             .set(TICKETS.DELETED_AT, deletedAt)
-            .where(TICKETS.COMPANY_ID.eq(companyId.value))
-            .and(TICKETS.ID.eq(ticketId.value))
-            .execute()
-    }
-
-    override fun setAssignee(
-        companyId: CompanyId,
-        ticketId: TicketId,
-        assigneeId: EmployeeId?,
-        updatedAt: LocalDateTime
-    ) {
-        dslContext.update(TICKETS)
-            .set(TICKETS.ASSIGNEE, assigneeId?.value)
-            .set(TICKETS.UPDATED_AT, updatedAt)
-            .where(TICKETS.COMPANY_ID.eq(companyId.value))
-            .and(TICKETS.ID.eq(ticketId.value))
-            .execute()
-    }
-
-    override fun setReporter(companyId: CompanyId, ticketId: TicketId, reporterId: EmployeeId, updatedAt: LocalDateTime) {
-        dslContext.update(TICKETS)
-            .set(TICKETS.ASSIGNEE, reporterId.value)
-            .set(TICKETS.UPDATED_AT, updatedAt)
-            .where(TICKETS.COMPANY_ID.eq(companyId.value))
-            .and(TICKETS.ID.eq(ticketId.value))
-            .execute()
-    }
-
-    override fun updateTitle(companyId: CompanyId, ticketId: TicketId, updatedTitle: String, updatedAt: LocalDateTime) {
-        dslContext.update(TICKETS)
-            .set(TICKETS.TITLE, updatedTitle)
-            .set(TICKETS.UPDATED_AT, updatedAt)
-            .where(TICKETS.COMPANY_ID.eq(companyId.value))
-            .and(TICKETS.ID.eq(ticketId.value))
-            .execute()
-    }
-
-    override fun updateDescription(companyId: CompanyId, ticketId: TicketId, updatedDescription: String?, updatedAt: LocalDateTime) {
-        dslContext.update(TICKETS)
-            .set(TICKETS.DESCRIPTION, updatedDescription)
-            .set(TICKETS.UPDATED_AT, updatedAt)
-            .where(TICKETS.COMPANY_ID.eq(companyId.value))
-            .and(TICKETS.ID.eq(ticketId.value))
-            .execute()
-    }
-
-    override fun setStatus(companyId: CompanyId, ticketId: TicketId, status: TicketStatus, updatedAt: LocalDateTime) {
-        dslContext.update(TICKETS)
-            .set(TICKETS.STATUS, status.value)
-            .set(TICKETS.UPDATED_AT, updatedAt)
             .where(TICKETS.COMPANY_ID.eq(companyId.value))
             .and(TICKETS.ID.eq(ticketId.value))
             .execute()

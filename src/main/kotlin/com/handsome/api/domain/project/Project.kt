@@ -3,7 +3,7 @@ package com.handsome.api.domain.project
 import com.handsome.api.domain.company.CompanyId
 import com.handsome.api.domain.employee.EmployeeId
 import org.jooq.generated.tables.records.ProjectsRecord
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.UUID
 
 data class ProjectId(val value: UUID) {
@@ -19,8 +19,8 @@ data class Project(
     val projectDescription: String,
     val projectOwner: EmployeeId,
     val createdBy: EmployeeId,
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    val deletedAt: LocalDateTime? = null
+    val createdAt: OffsetDateTime = OffsetDateTime.now(),
+    val deletedAt: OffsetDateTime? = null
 ) {
     fun toProjectRecord(): ProjectsRecord {
         val record = ProjectsRecord()
